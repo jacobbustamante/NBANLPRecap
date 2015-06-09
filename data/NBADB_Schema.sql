@@ -1,5 +1,11 @@
-drop table if exists play_by_play;
+/*
+NBADB_Schema
+This is the schema used when creating the NBADB sqlite db file.
+The current tables are:
+player_by_play, game, stadium, schedule, player, division, and conference
+*/
 
+drop table if exists play_by_play;
 create table play_by_play (
   id integer not null primary key autoincrement,
   game_id integer references game(id),
@@ -54,7 +60,6 @@ create table stadium (
   fox_id integer,
   unique(name, city)
 );
-
 
 drop table if exists team;
 create table team (

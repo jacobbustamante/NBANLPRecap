@@ -2,6 +2,13 @@
 # NBA Database - Main Interface
 # Jacob Bustamante
 
+"""
+nba_db
+This is the main interfacing class for working with NBA Database, the sqlite db file.
+The classes Game, Team, and Player are used as input to load into the db and output when retrieving from the db.
+These functions are used to retrieve the desired data or insert into db.
+"""
+
 import sqlite3
 import os, inspect
 import data.data_globals as dg

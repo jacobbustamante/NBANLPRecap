@@ -2,6 +2,11 @@
 # Recap Generator - Main
 # Jacob Bustamante
 
+"""
+gen_recap
+This is the main file which generates recap articles and calls importting and scraping functions.
+"""
+
 import sys, re, os, sqlite3, random, glob
 import inspect
 import recap_strings
@@ -21,10 +26,13 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+# Turns a number into its ordinal. ex) 2 -> 2nd, 5 -> 5th
 num_ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
 
 """
-Headline recap
+Headline recap bidding
+gen_headline is called, which runs each of the following bid functions.
+The bid with the highest rating is chosen as the headline.
 """
 
 bid_headline_counts = {'bid_headline_default':0, 'bid_headline_player':0, 'bid_last_second_shot':0, 'bid_headline_partial_default':0, 'bid_headline_tied_partial_default':0, 'bid_headline_comeback':0, 'bid_headline_team_rating':0}
@@ -97,30 +105,12 @@ def gen_headline(info):
     
     return output
 
-"""
-Intro story
-"""
-
-bid_intro_counts = {'bid_intro_default':0}
-
-def bid_intro_default(info):
-    if type(info.event) == type(Event_High_Rating()):
-        return (0.25, recap_string_from_list(recap_strings.intro_player_strings, info.event.get_dict()), 'bid_intro_default')
-    elif type(info.event) == type(Event_Scoring_Run()):
-        return (0.25, recap_string_from_list(recap_strings.intro_run_strings, info.event.get_dict()), 'bid_headline_default')
-    else:
-        return (0, "")
-
-def gen_intro(info):
-    output = []
-    
-    max_bid = max([globals()[bid_function](info) for bid_function in bid_intro_counts.keys()])
-    output.append(max_bid[1])
-    
-    return output
 
 """
 Record and standings recap
+gen_record is called, which runs each of the following bid functions, separated into general and meta functions.
+The general bid with the highest rating is chosen as the main record story.
+All the meta bids rated above a 0 are chosen to follow the main story.
 """
 
 bid_record_counts = {'bid_record_default':0, 'bid_record_partial_default':0}
@@ -183,30 +173,11 @@ def gen_record(info):
 
 
 """
-Player statistics recap
-"""
-
-bid_stat_counts = {'bid_stat_default':0}
-
-def bid_stat_default(info):
-    rating = info['points'] * 0.02 + info['assists'] * 0.01
-    
-    return (rating, recap_string_from_list(recap_strings.stat_strings, info), 'bid_stat_default')
-
-def gen_stat(info):
-    output = []
-    
-    stat_lower_bound = 0.25
-    
-    max_bid = max([globals()[bid_function](info) for bid_function in bid_stat_counts.keys()])
-    if max_bid[0] > stat_lower_bound:
-        output.append(max_bid[1])
-    
-    return output
-
-
-"""
 Events
+An Event is a data structure that holds data for a given event. Ex. High stats, last second shot, foul out.
+These events have text generation functions that can generate strings based its event data.
+Events can be added or removed by creating Event subclasses, if neccessary, and adding an even calculation
+function to the calc_events function.
 """
 class Event:
     def __init__(self, rating, event):
@@ -712,6 +683,11 @@ class Event_Comeback:
     def calc_details(self):
         self.details.append(self)
 
+"""
+Event Calc funtcions
+These are the calc functions for events. These are the functions that discover events in the game data.
+calc functions can be added by creating the function, then calling it in calc_events().
+"""
 
 def calc_high_stat_events():
     global events, players
@@ -872,6 +848,13 @@ def calc_comeback():
             rating = 0.5 + (home_biggest_lead_qtr*.1) + (.2 / cur_lead)
             events.append(Event(rating, Event_Comeback(False, teams[game_info['away_team_id']], teams[game_info['home_team_id']], home_biggest_lead, home_biggest_lead_qtr, abs(cur_lead))))
     
+"""
+Event sorting and aggregating
+These sort functions both sort the order of the events, and
+aggregate certain specified events together. So a group of players with
+similar stats could be grouped together as one event. Sorting and aggregating
+functions can be added by calling the function in the sort_events function.
+"""
 
 def sort_team_high_stats():
     global events
@@ -928,8 +911,11 @@ def sort_sig_and_stat_events():
             new_events.append(event)
     events = sig_events + new_events
     
-    stat_events = stat_events[:4]
+    stat_events = stat_events[:3]
     stat_events.sort(key = lambda k: (k.event.team, k.rating), reverse=True)
+    if all([type(e.event) is Event_Team_Rating for e in stat_events]):
+        stat_events = stat_events[:2]
+        stat_events.sort(key = lambda k: (k.event.team, k.rating), reverse=True)
 
 def calc_events():
     global events
@@ -961,7 +947,9 @@ def sort_sig_events():
 
 
 """
-Other functions
+Game data calculations
+These functions and Player class create the data structure to hold the current game state.
+Statistics like player points, player fouls, and team records are calculated here.
 """
 
 class Player:
@@ -1041,7 +1029,7 @@ def calc_foul(play):
         time_left = (int(play['quarter']), int(play['minutes']), int(play['seconds']))
         events.append(Event(rating, Event_Foul_Out(players[play['p_player_id']], time_left)))
 
-# NEEDS WORK
+# Needs to be implemented differently for FoxSports
 def calc_steal(play):
     global players
     add_player(play['p_player_id'], play['primary_player'], play['name'])
@@ -1117,17 +1105,20 @@ def calc_record():
     game_info['away_wins'] = wins
     game_info['away_losses'] = losses
 
-# TODO: Maybe have to use p_player_id instead of primary_player
-#       to fix None players
 # NOTE: Some rebounds have no player or player_id attached to them
-#       will probably have to just live with
+#       will just live with
 def add_player(player_id, player_name, team_name, t_index=0):
     global players
     if player_id and player_name and player_id not in list(players.keys()):
         players[player_id] = Player(player_id, player_name, team_name)
         players[player_id].db = nba_db.get_player_foxsports(player_id)
-    #if DEBUG and player_name in ["Hawks", "Nets"]:
-    #    print(t_index)
+
+"""
+calculate_stats
+Data for the current game state is calculated in this function.
+The player stats is calculated by iterating through the play-by-plays and incrementing stats
+there when neccessary.
+"""
 
 def calculate_stats():
     global game_plays
@@ -1159,6 +1150,8 @@ def calculate_stats():
         elif DEBUG:
             pass
 
+# Returns a string for the given quarter.
+# Ex. 3 -> the 3rd quarter, 6 -> double overtime
 def get_quarter_str(quarter):
     quarter_str = ""
     if quarter <= 4:
@@ -1171,10 +1164,12 @@ def get_quarter_str(quarter):
         quarter_str = "overtime"
     return quarter_str
 
+# Adds any extra data to the game_info global variable
 def game_info_passthrough():
     global game_info
     game_info['teams'] = [game_info['home_team'], game_info['away_team']]
 
+# Adds any extra data to the game_plays global list variable
 def game_plays_passthrough():
     global game_plays
     for play_index, play in enumerate(game_plays):
@@ -1190,6 +1185,11 @@ def game_plays_passthrough():
             play['quarter_str'] = num_ordinal(play['quarter'])
     
 
+"""
+Central location for outputting text
+out_type 0 is for debug. Prints to console.
+out_type 1 is for HTML output. Constructs an HTML web page article.
+"""
 def parse_recap_strings(output_strings, out_type=0, web_type=0):
     if out_type == 0:
         if output_strings:
@@ -1197,6 +1197,9 @@ def parse_recap_strings(output_strings, out_type=0, web_type=0):
     elif out_type == 1:
         print_to_web(output_strings, web_type)
 
+"""
+HTML document constructing functions
+"""
 def print_to_web(output, web_type=0):
     file_name = web_dir + str(game_info['game_code']) + ".html"
     
@@ -1267,6 +1270,7 @@ def web_get_short_summaries(story_list):
     
     return summary
 
+# Gets a general emotion-neutral image of the home team.
 def web_get_image():
     global game_info
     
@@ -1349,10 +1353,15 @@ def web_close():
 
     return closing
 
+"""
+Used to choose a random recap template string from a list in recap_strings.
+The chosen template string is filled with the variables in info.
+"""
 def recap_string_from_list(strings, info):
     i = random.randint(0, len(strings) - 1)
     return strings[i][0] % tuple(info[key] for key in strings[i][1])
 
+# Used to debug print game plays to console
 def parse_comment(play, game_time):
     time_string = "Q" + str(game_time[0]) + " " + str(game_time[1]) + ':%02d' % (game_time[2],)
     time_string +=  " " + str(game_info['home_team']) + " " + str(game_time[3]) + "-" + str(game_time[4]) + " " + str(game_info['away_team'])
@@ -1362,6 +1371,7 @@ def parse_comment(play, game_time):
     print(play)
     print()
 
+# Gets a Player list for the given team
 def get_players(team_id, team):
     players = nba_db.get_team(team_id)
     player_list = []
@@ -1372,11 +1382,13 @@ def get_players(team_id, team):
     players_dict = dict([(p.foxsports_id, p) for p in player_list])
     return players_dict
 
+# Gets a dict of nba_db Team objects for the given teams.
 def get_teams(home_team_id, away_team_id):
     home_team = nba_db.get_team_data(home_team_id)
     away_team = nba_db.get_team_data(away_team_id)
     return dict([(home_team_id, home_team), (away_team_id, away_team)])
 
+# Retrieves the game_info for the current game. This includes teams, scores, cities, and other info
 def get_game_info(game_id):
     conn = sqlite3.connect(dg.db_filepath)
     conn.row_factory = dict_factory
@@ -1420,6 +1432,8 @@ def get_game_info(game_id):
     game_info['game_id'] = game_id
     return game_info
 
+# Retrieves the list of play_by_plays for the given game.
+# If a partial game is chosen, only those plays before the given cutoff partial_time are retrieved.
 def get_game_plays(game_id):
     global partial, partial_time
     
@@ -1441,6 +1455,7 @@ def get_game_plays(game_id):
     
     return data
 
+# Adds any extra data if the current game is a partial game.
 def partial_passthrough():
     global game_plays, game_info, partial_time
     last_play = game_plays[-1]
@@ -1468,6 +1483,16 @@ def partial_passthrough():
         game_info['loser_city'] = game_info['home_city']
     game_info['lead'] = int(game_info['winner_score']) - int(game_info['loser_score'])
 
+"""
+interface_main
+This is the main function to interface with the user.
+Options are givent to the user to do the following:
+1) 1 - max_num: generate a selection available articles
+2) ALL: generate all available articles
+3) PARTIAL: generate partial game recap articles
+4) IMPORT: import downloaded scraped data into the NBA Database
+5) SCRAPE: scrape game and schedule data from the web to the local machine
+"""
 def interface_main():
     global DEBUG
     
@@ -1477,7 +1502,7 @@ def interface_main():
     # Look for data
     num_games = interface_check_games()
     if num_games > 0:
-        game_nums = input("Select games between 1 and " + str(num_games) + ", or ALL, or PARTIAL, or IMPORT, or SCRAPE: ")
+        game_nums = input("Enter games between 1 and " + str(num_games) + ", or ALL, or PARTIAL, or IMPORT, or SCRAPE: ")
         if "IMPORT" in str.upper(game_nums):
             interface_import_games(importting=True)
             interface_scrape_game_schedules(importting=True)
@@ -1490,7 +1515,7 @@ def interface_main():
             qms_str = input("Enter [quarter minutes seconds]: ")
             partial_time = tuple(map(int, qms_str.split()))
             partial = True
-            game_nums = input("Select games between 1 and " + str(num_games) + ", or ALL: ")
+            game_nums = input("Enter games between 1 and " + str(num_games) + ", or ALL: ")
         else:
             partial = False
             partial_time=(4,0,0)
@@ -1498,9 +1523,24 @@ def interface_main():
             game_nums = list(range(1, (num_games + 1)))
         else:
             game_nums = list(map(int, game_nums.split()))
-        for game_id in game_nums:
-            file_name = gen_article(game_id, partial, partial_time, debug=DEBUG)
-            print("Game", game_id, "written to", file_name)
+        try:
+            print("Generating Articles. Press ctrl-c to end early.")
+            for game_id in game_nums:
+                try:
+                    file_name = gen_article(game_id, partial, partial_time, debug=DEBUG)    
+                    print("Game", game_id, "written to", file_name)
+                except KeyboardInterrupt:
+                    print("Article generation ended early by user.", game_id, "removed or not written.")
+                    if os.path.exists(file_name):
+                        os.remove(file_name)
+                    break
+                except:
+                    print("Error: Game", game_id)
+        except KeyboardInterrupt:
+            print("Article generation ended early by user. Game", game_id, "removed or not written.")
+            if os.path.exists(file_name):
+                os.remove(file_name)
+            
     else:
         print("Please import some data.")
     
@@ -1575,6 +1615,15 @@ def interface_scrape_game_schedules(importting=False, scraping=False):
             # import game schedule jsons into schedule table
             nba_scrapers.import_schedule_dir_into_db(sg.scraper_path)
 
+"""
+gen_article
+This is the main function to generate an article.
+An article is generated from the game specified by game_id with the matching NBA Database game of the game_id.
+1) Game data is retrieved
+2) Game stats are calculated
+3) Events are discovered and sorted
+3) 
+"""
 def gen_article(game_id, partial_var=False, partial_time_var=(4,0,0), debug=DEBUG):
     global DEBUG, game_info, game_plays, teams, players, events, sig_events, stat_events, partial, partial_time
     

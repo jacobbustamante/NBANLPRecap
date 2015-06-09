@@ -2,6 +2,12 @@
 # Recap Generator - Testing
 # Jacob Bustamante
 
+"""
+test_recap
+This is used to quickly generate the specified test_games articles.
+The chosen games represent a variety of games and should be used to efficently test
+the quality of the recap generator.
+"""
 
 import sys, os
 import gen_recap
@@ -10,7 +16,6 @@ from data import nba_db
 
 web_file_dir = "./web/2014_season/"
 test_games = [1, 8, 121, 300, 500, 640, 641, 646, 800, 801, 1220, 1225]
-
 
 def generate_web_article(game_id, open_browser=True, partial=False):
     partial_time = (3, 8, 0)

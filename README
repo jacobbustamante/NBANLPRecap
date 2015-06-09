@@ -23,7 +23,7 @@ How to run:
 	ex2) Select games between 1 and 1225…: 4 5 8 10
 	ex3) Select games between 1 and 1225…: ALL
 
-3.2) Enter "Partial" to generate an article for part of a game.
+3.2) Enter "PARTIAL" to generate an article for part of a game.
 	ex1) Enter [quarter minutes seconds]: 3 1 47
 	ex2) Enter [quarter minutes seconds]: 4 0 0
 

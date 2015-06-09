@@ -2,6 +2,14 @@
 # Scrapers - Main
 # Jacob Bustamante
 
+"""
+nba_scrapers
+This is the main file to call web scrapers and
+import their data into NBA Database, the sqlite db file.
+The scrape_onetwosee, scrape_foxsports, and insert_int_db files contain
+the bulk of the underlying functions.
+"""
+
 import os
 from glob import glob
 import scrapers.scrapers_globals as sg
