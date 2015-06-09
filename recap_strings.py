@@ -11,6 +11,7 @@ headline_strings = [
     ("%s win in %s over the %s %s-%s.", ['winner_team_name', 'home_city', 'loser_team_name', 'winner_score', 'loser_score']),
     ("%s win by %s over the %s %s-%s.", ['winner_team_name', 'lead', 'loser_team_name', 'winner_score', 'loser_score']),
     ("%s defeats the %s by %s, %s-%s.", ['winner_city', 'loser_team_name', 'lead', 'winner_score', 'loser_score']),
+    ("%s beat %s %s-%s.", ['winner_city', 'loser_city', 'winner_score', 'loser_score']),
 ]
 
 headline_partial_strings = [
@@ -38,21 +39,26 @@ record_strings = [
     ("The %s now hold a %s-%s record after that result, while the %s hold a %s-%s record.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
     ("The %s are now %s-%s. The %s are at %s-%s after that result.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
     ("The result puts %s at %s-%s for the season. The %s are now %s-%s.", ('home_city', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
+    ("The %s are %s-%s for the season. The %s are %s-%s.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
+    ("This result puts %s at %s-%s for the season, while the %s are %s-%s.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
 ]
 
 record_partial_strings = [
     ("The %s currently have a %s-%s record, while the %s hold a %s-%s record.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
     ("The %s are %s-%s so far this season. The %s are %s-%s.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
+    ("The %s are currently %s-%s, while the %s are %s-%s in the season.", ('home_team', 'home_wins', 'home_losses', 'away_team', 'away_wins', 'away_losses')),
 ]
 
 team_losing_streak_strings = [
     ("It's been a rough last few games for the %s. They've lost their last %s games.", ['team_name', 'num_past_games']),
     ("The %s haven't won in the last %s games.", ['team_name', 'num_past_games']),
     ("The %s have lost their last %s games.", ['team_name', 'num_past_games']),
+    ("The %s are 0 for %s these past %s games.", ['team_name', 'num_past_games', 'num_past_games']),
 ]
 
 team_winning_streak_strings = [
     ("The %s continue their great streak, winning %s of %s.", ['team_name', 'num_won', 'num_past_games']),
+    ("The %s add to their streak, winning their last %s.", ['team_name', 'num_past_games']),
     ("The %s have been playing great these last few games. They've won their last %s.", ['team_name', 'num_past_games']),
     ("The %s have been playing great these last few games, winning their last %s.", ['team_name', 'num_past_games'])
 ]
@@ -61,12 +67,14 @@ team_losing_streak_partial_strings = [
     ("It's been a rough last few games for the %s. They've lost their last %s games.", ['team_name', 'num_past_games']),
     ("The %s haven't won in the last %s games.", ['team_name', 'num_past_games']),
     ("The %s have lost their last %s games.", ['team_name', 'num_past_games']),
+    ("The %s are looking to break a %s game losing streak.", ['team_name', 'num_past_games']),
 ]
 
 team_winning_streak_partial_strings = [
-    ("The %s are aiming to continue their great streak, winning %s of %s.", ['team_name', 'num_won', 'num_past_games']),
+    ("The %s are aiming to continue their streak, winning %s of %s.", ['team_name', 'num_won', 'num_past_games']),
     ("The %s have been playing great these last few games. They've won their last %s games.", ['team_name', 'num_past_games']),
     ("A win here would add to the %s current %s-game winning streak.", ['team_name', 'num_won']),
+    ("The %s are currently on a %s-game winning streak.", ['team_name', 'num_won']),
 ]
 
 """
@@ -74,6 +82,7 @@ statistics
 """
 stat_strings = [
     ("%s scored %s points and got %s assists and %s rebounds for the %s.", ('name', 'points', 'assists', 'rebounds', 'team')),
+    ("%s got %s points for the %s and added %s assists and %s rebounds.", ('name', 'team', 'points', 'assists', 'rebounds')),
     ("%s recorded %s points, %s assists, and %s rebounds.", ('name', 'points', 'assists', 'rebounds'))
 ]
 
@@ -137,6 +146,8 @@ headline_high_rating_strings = [
     ("%s takes down %s, %s win %s to %s", ['last_name', 'loser_team_name', 'winner_team_name', 'winner_score', 'loser_score']),
     ("%s and the %s win over %s, %s-%s", ['last_name', 'winner_team_name', 'loser_city', 'winner_score', 'loser_score']),
     ("%s scores %s, %s defeat the %s by %s, %s to %s", ['last_name', 'stat', 'winner_team_name', 'loser_team_name', 'lead', 'winner_score', 'loser_score']),
+    ("%s scores %s in %s win over the %s, %s to %s", ['last_name', 'stat', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s scores %s in %s %s to %s win over the %s", ['last_name', 'stat', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name']),
     ("%s fall to the %s %s to %s, %s scores %s", ['loser_team_name', 'winner_team_name', 'loser_score', 'winner_score', 'name', 'stat']),
     ("%s lose by %s against %s and the %s, %s-%s", ['loser_team_name', 'lead', 'name', 'winner_team_name', 'loser_score', 'winner_score'])
 ]
@@ -144,20 +155,32 @@ headline_high_rating_strings = [
 intro_high_rating_strings = [
     ("%s proved key, as he put up %s %s for the %s.", ['name', 'stat', 'stat_name', 'team']),
     ("%s recorded %s %s for the %s.", ['name', 'stat', 'stat_name', 'team']),
-    ("%s had a great game, scoring %s %s for the %s.", ['name', 'stat', 'stat_name', 'team'])
+    ("%s had a great game, scoring %s %s for the %s.", ['name', 'stat', 'stat_name', 'team']),
+    ("%s made good contributions, scoring %s %s for the %s.", ['name', 'stat', 'stat_name', 'team']),
+    ("%s played well, recording %s %s for the %s.", ['name', 'stat', 'stat_name', 'team']),
+    ("%s contributed well to the %s total, recording %s %s.", ['name', 'team', 'stat', 'stat_name']),
 ]
 
 
 high_rating_strings = [
-    ("%s led the %s in %s with %s %s.", ('first_name', 'team', 'stat_noun', 'stat', 'stat_name'))
+    ("%s led the %s in %s with %s %s.", ('first_name', 'team', 'stat_noun', 'stat', 'stat_name')),
+    ("%s made contributions in %s with %s %s for the %s.", ('first_name', 'stat_noun', 'stat', 'stat_name', 'team')),
+    ("%s put up %s %s for the %s in a good %s contribution.", ('first_name', 'stat', 'stat_name', 'team', 'stat_noun')),
 ]
 
 high_rating_quarter_strings = [
-    ("%s of his points were scored in the %s quarter.", ['high_quarter_points', 'high_quarter'])
+    ("%s of his points were scored in the %s quarter.", ['high_quarter_points', 'high_quarter']),
+    ("%s of his points occurred in the %s quarter.", ['high_quarter_points', 'high_quarter']),
+    ("His biggest contribution was in the %s quarter, recording %s of his total points.", ['high_quarter', 'high_quarter_points']),
+    ("He put in %s in the %s quarter alone.", ['high_quarter_points', 'high_quarter'])
 ]
 
 high_rating_details_strings = [
-    ("%s also recorded %s.", ['last_name', 'assists_and_rebounds'])
+    ("%s also recorded %s.", ['last_name', 'assists_and_rebounds']),
+    ("%s also contributed with %s.", ['last_name', 'assists_and_rebounds']),
+    ("%s added %s.", ['last_name', 'assists_and_rebounds']),
+    ("%s put up %s.", ['last_name', 'assists_and_rebounds']),
+    ("%s added %s to his total.", ['last_name', 'assists_and_rebounds']),
 ]
 
 """
@@ -166,6 +189,9 @@ high rating leader event
 
 headline_high_rating_leader_strings = [
     ("%s scores %s, %s defeat the %s %s to %s", ['last_name', 'stat', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s scores %s in %s defeat of the %s, %s to %s", ['last_name', 'stat', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s scores %s in %s win over the %s, %s to %s", ['last_name', 'stat', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s scores %s in %s %s to %s win over the %s", ['last_name', 'stat', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name']),
     ("%s fall to the %s %s to %s, %s scores %s", ['loser_team_name', 'winner_team_name', 'loser_score', 'winner_score', 'name', 'stat'])
 ]
 
@@ -185,15 +211,21 @@ high overall stats event
 """
 
 headline_overall_stats_strings = [
-    ("%s records %s points, %s assists, %s defeat the %s %s to %s", ['last_name', 'points', 'assists', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score'])
+    ("%s records %s points, %s assists, %s defeat the %s %s to %s", ['last_name', 'points', 'assists', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s put up %s points and %s assists in %s win over the %s, %s to %s", ['last_name', 'points', 'assists', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s put up %s points and %s assists in %s %s to %s win over the %s", ['last_name', 'points', 'assists', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name'])
 ]
 
 intro_overall_stats_strings = [
-    ("%s performed well for the %s, putting up %s points and %s assists.", ['name', 'team', 'points', 'assists'])
+    ("%s performed well for the %s, putting up %s points and %s assists.", ['name', 'team', 'points', 'assists']),
+    ("%s had a great game for the %s, putting up %s points and %s assists.", ['name', 'team', 'points', 'assists']),
+    ("%s recorded %s points and %s assists in a great overall game.", ['name', 'points', 'assists'])
 ]
 
 overall_stats_strings = [
-    ("%s led the %s with %s points, %s assists, and %s rebounds.", ('first_name', 'team', 'points', 'assists', 'rebounds'))
+    ("%s led the %s with %s points, %s assists, and %s rebounds.", ('first_name', 'team', 'points', 'assists', 'rebounds')),
+    ("%s led the %s putting up %s points, %s assists, and %s rebounds.", ('first_name', 'team', 'points', 'assists', 'rebounds')),
+    ("%s led the %s putting up a total %s points, %s assists, and %s rebounds.", ('first_name', 'team', 'points', 'assists', 'rebounds'))
 ]
 
 
@@ -202,15 +234,23 @@ high team rating event
 """
 
 headline_high_team_rating_strings = [
-    ("%s prove too much for the %s, %s win %s to %s", ['name', 'loser_team_name', 'winner_team_name', 'winner_score', 'loser_score'])
+    ("%s prove too much for the %s, %s win %s to %s", ['name', 'loser_team_name', 'winner_team_name', 'winner_score', 'loser_score']),
+    ("%s combine for %s in %s win over the %s, %s to %s", ['name', 'total_points', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s combine for %s in %s %s to %s win over the %s", ['name', 'total_points', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name']),
+    ("%s contribute %s in %s %s to %s win over the %s", ['name', 'total_points', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name']),
+    ("%s put up %s in %s %s to %s win over the %s", ['name', 'total_points', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name'])
 ]
 
 intro_high_team_rating_strings = [
-    ("%s performed great with %s.", ['name', 'points'])
+    ("%s performed great with %s.", ['name', 'points']),
+    ("%s put up a combined %s points.", ['name', 'total_points']),
+    ("%s put up a combined total %s points.", ['name', 'total_points']),
 ]
 
 high_team_rating_strings = [
-    ("The %s %s made great contributions with %s.", ('team', 'name', 'points'))
+    ("The %s %s made great contributions with %s. Together they made up %s of the %s total.", ('team', 'name', 'points', 'total_points', 'team')),
+    ("%s combined for %s points of the %s total. Each scoring %s. ", ('name', 'total_points', 'team', 'points')),
+    ("%s totaled %s points for the %s, putting up %s. ", ('name', 'total_points', 'team', 'points'))
 ]
 
 """
@@ -218,15 +258,23 @@ team rating event
 """
 
 headline_team_rating_strings = [
-    ("%s prove too much for the %s, %s win %s to %s", ['name', 'loser_team_name', 'winner_team_name', 'winner_score', 'loser_score'])
+    ("%s prove too much for the %s, %s win %s to %s", ['name', 'loser_team_name', 'winner_team_name', 'winner_score', 'loser_score']),
+    ("%s combine for %s in %s win over the %s, %s to %s", ['name', 'total_points', 'winner_team_name', 'loser_team_name', 'winner_score', 'loser_score']),
+    ("%s combine for %s in %s %s to %s win over the %s", ['name', 'total_points', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name']),
+    ("%s contribute %s in %s %s to %s win over the %s", ['name', 'total_points', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name']),
+    ("%s put up %s in %s %s to %s win over the %s", ['name', 'total_points', 'winner_team_name', 'winner_score', 'loser_score', 'loser_team_name'])
 ]
 
 intro_team_rating_strings = [
-    ("%s contributed with %s.", ['name', 'points'])
+    ("%s contributed with %s.", ['name', 'points']),
+    ("%s put up a combined %s points.", ['name', 'total_points']),
+    ("%s put up a combined total %s points.", ['name', 'total_points']),
 ]
 
 team_rating_strings = [
-    ("The %s %s put in %s.", ('team', 'name', 'points'))
+    ("The %s %s put in %s.", ('team', 'name', 'points')),
+    ("%s combined for %s points. Each scoring %s. ", ('name', 'total_points', 'points')),
+    ("%s totaled %s points for the %s, putting up %s. ", ('name', 'total_points', 'team', 'points'))
 ]
 
 
@@ -241,7 +289,9 @@ intro_run_strings = [
 ]
 
 scoring_run_strings = [
-    ("The %s went on a %s and 0 run in the %s quarter with the %s giving up %s turnovers and %s missed attempts during that time.", ('winning_team', 'winning_points', 's_quarter', 'losing_team', 'turnovers', 'missed_attempts'))
+    ("The %s went on a %s and 0 run in the %s quarter with the %s giving up %s turnovers and %s missed attempts during that time.", ('winning_team', 'winning_points', 's_quarter', 'losing_team', 'turnovers', 'missed_attempts')),
+    ("The %s had a %s and 0 run starting in the %s. The %s gave up possession with %s turnovers and had %s missed attempts during that time.", ('winning_team', 'winning_points', 's_quarter', 'losing_team', 'turnovers', 'missed_attempts')),
+    ("The %s surged with a %s and 0 run in the %s. The %s took advantage of the %s %s turnovers and %s missed attempts during that time.", ('winning_team', 'winning_points', 's_quarter', 'winning_team', 'losing_team', 'turnovers', 'missed_attempts'))
 ]
 
 run_details_strings = [
@@ -254,11 +304,15 @@ last second shot event
 """
 
 headline_last_second_shot_strings = [
-    ("%s's buzzer beater lifts the %s over the %s %s-%s.", ("primary_player", "winning_team", "losing_team", "winner_score", "loser_score"))
+    ("%s's buzzer beater lifts the %s over the %s %s-%s.", ("primary_player", "winning_team", "losing_team", "winner_score", "loser_score")),
+    ("%s's clutch shot at the buzzer lifts the %s over the %s %s-%s.", ("primary_player", "winning_team", "losing_team", "winner_score", "loser_score")),
+    ("%s's winning shot in the last seconds gives the %s a late win over the %s, %s-%s.", ("primary_player", "winning_team", "losing_team", "winner_score", "loser_score")),
+    ("%s's winning shot in the last seconds gives the %s a late %s-%s win over the %s.", ("primary_player", "winning_team", "winner_score", "loser_score", "losing_team"))
 ]
 
 intro_last_second_shot_strings = [
-    ("%s made the winning shot with %s seconds remaining to take a %s-%s lead.", ("primary_player", "seconds", "winner_score", "loser_score"))
+    ("%s made the winning shot with %s seconds remaining to take a %s-%s lead.", ("primary_player", "seconds", "winner_score", "loser_score")),
+    ("%s buzzer beater went in with %s seconds remaining to take a %s-%s lead.", ("primary_player", "seconds", "winner_score", "loser_score"))
 ]
 
 last_second_shot_strings = [
@@ -274,11 +328,14 @@ big lead event
 """
 
 intro_big_lead_strings = [
-    ("The %s's biggest lead of the night was by %s with %s minutes remaining in the %s.", ("lead_team", "points_up", "minutes", "quarter_str"))
+    ("The %s biggest lead of the night was by %s with %s minutes remaining in the %s.", ("lead_team", "points_up", "minutes", "quarter_str")),
+    ("The %s largest lead was by %s with %s minutes remaining in the %s.", ("lead_team", "points_up", "minutes", "quarter_str"))
 ]
 
 big_lead_strings = [
-    ("The %s were up by as much as %s points in the %s with a %s-%s lead.", ("lead_team", "points_up", "quarter_str", "lead_points", "down_points"))
+    ("The %s were up by as much as %s points in the %s with a %s-%s lead.", ("lead_team", "points_up", "quarter_str", "lead_points", "down_points")),
+    ("The %s led by as much as %s in the %s with a %s-%s lead.", ("lead_team", "points_up", "quarter_str", "lead_points", "down_points")),
+    ("The %s held a %s point %s-%s lead in the %s.", ("lead_team", "points_up", "lead_points", "down_points", "quarter_str"))
 ]
 
 big_lead_details_strings = [
@@ -296,10 +353,14 @@ headline_foul_out_strings = [
 
 intro_foul_out_strings = [
     ("%s fouled out in %s after recording his sixth foul of the night.", ['last_name', 'quarter_str']),
+    ("%s left the game in %s after recording his sixth foul of the night.", ['last_name', 'quarter_str']),
+    ("%s fouled out of the game after recording his last foul in %s.", ['last_name', 'quarter_str']),
 ]
 
 foul_out_strings = [
-    ("%s fouled out with %s:%s remaining in %s.", ('last_name', 'quarter', 'minutes', 'quarter_str'))
+    ("%s fouled out with %s:%s remaining in %s.", ('last_name', 'quarter', 'minutes', 'quarter_str')),
+    ("%s recorded his last foul with %s:%s remaining in %s.", ('last_name', 'quarter', 'minutes', 'quarter_str')),
+    ("%s recorded his last foul with %s:%s left in %s.", ('last_name', 'quarter', 'minutes', 'quarter_str'))
 ]
 
 
@@ -308,15 +369,21 @@ comeback success event
 """
 
 headline_comeback_success_strings = [
-    ("The %s comeback from %s down to take a %s-%s win over the %s.", ['comeback_team', 'points_down', 'winner_score', 'loser_score', 'other_team'])
+    ("The %s come back from %s down to take a %s-%s win over the %s.", ['comeback_team', 'points_down', 'winner_score', 'loser_score', 'other_team']),
+    ("The %s come from %s down to take a %s-%s win over the %s.", ['comeback_team', 'points_down', 'winner_score', 'loser_score', 'other_team']),
+    ("The %s overcome %s point deficit to take a %s-%s win over the %s.", ['comeback_team', 'points_down', 'winner_score', 'loser_score', 'other_team']),
 ]
 
 intro_comeback_success_strings = [
-    ("The %s came back from %s down to win the game.", ['comeback_team', 'points_down'])
+    ("The %s came back from %s down to win the game.", ['comeback_team', 'points_down']),
+    ("The %s overcome %s to take the game.", ['comeback_team', 'points_down']),
+    ("The %s overcome a %s point deficit to take the game.", ['comeback_team', 'points_down']),
+    ("The %s couldn't hold on to a %s point lead and give up game to the %s.", ['other_team', 'points_down', 'comeback_team'])
 ]
 
 comeback_success_strings = [
-    ("The %s were down by as much as %s points in the %s before they cameback to take the lead.", ('comeback_team', 'points_down', 'quarter_str'))
+    ("The %s were down by as much as %s points in the %s before they came back to take the lead.", ('comeback_team', 'points_down', 'quarter_str')),
+    ("The %s were down by as much as %s points in the %s before their comeback to take the lead.", ('comeback_team', 'points_down', 'quarter_str'))
 ]
 
 """
@@ -324,15 +391,23 @@ comeback fail event
 """
 
 headline_comeback_fail_strings = [
-    ("%s come short, %s hold on to %s-%s lead.", ['comeback_team', 'other_team', 'winner_score', 'loser_score'])
+    ("%s come short, %s hold on to %s-%s lead.", ['comeback_team', 'other_team', 'winner_score', 'loser_score']),
+    ("%s stage near comeback, %s hold on to %s-%s lead.", ['comeback_team', 'other_team', 'winner_score', 'loser_score']),
+    ("%s comes close, %s save win with %s-%s lead.", ['comeback_team', 'other_team', 'winner_score', 'loser_score']),
+    ("%s comeback stops short, %s save win with %s-%s lead.", ['comeback_team', 'other_team', 'winner_score', 'loser_score']),
+    ("%s comeback stops short, %s hole on to win with %s-%s lead.", ['comeback_team', 'other_team', 'winner_score', 'loser_score'])
 ]
 
 intro_comeback_fail_strings = [
-    ("The %s win by just %s, after %s cut %s point lead.", ['other_team', 'lead', 'comeback_team', 'points_down'])
+    ("The %s win by just %s, after %s cut %s point lead.", ['other_team', 'lead', 'comeback_team', 'points_down']),
+    ("The %s lead cut to %s after %s come back from %s point deficit. The %s held on just enough to save the win.", ['other_team', 'lead', 'comeback_team', 'points_down', 'other_team']),
+    ("The %s %s point lead falls to %s after %s cut deficit.", ['other_team', 'lead', 'comeback_team', 'points_down']),
+    ("The %s %s point lead falls to %s after %s nearly make comeback.", ['other_team', 'lead', 'comeback_team', 'points_down']),
 ]
 
 comeback_fail_strings = [
-    ("The %s were down by as much as %s points in the %s before they closed the gap to just %s.", ('comeback_team', 'points_down', 'quarter_str', 'lead'))
+    ("The %s were down by as much as %s points in the %s before they closed the gap to just %s.", ('comeback_team', 'points_down', 'quarter_str', 'lead')),
+    ("The %s were down by as much as %s points in the %s before they came within %s in the end.", ('comeback_team', 'points_down', 'quarter_str', 'lead')),
 ]
 
 

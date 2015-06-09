@@ -275,6 +275,7 @@ class Event_Team_Rating:
         self.high = high
         self.leader = leader
         self.team = self.players[0].team
+        self.total_points = sum([p.points for p in players])
         self.player = ", ".join([p.name for p in players[:-1]])
         self.player += (" and " + players[-1].name) if len(players) == 2 else (", and " + players[-1].name)
         if [p.points for p in players].count(players[0].points) == len(players):
@@ -292,6 +293,7 @@ class Event_Team_Rating:
         d = dict()
         d['name'] = self.player
         d['team'] = self.players[0].team
+        d['total_points'] = self.total_points
         d['points'] = self.points
         
         d['stat_name'] = "points"
