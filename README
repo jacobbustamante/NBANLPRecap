@@ -1,0 +1,35 @@
+Project Name: NBANLP: Natural Language Generation of NBA Game Recap Articles
+by Jacob Bustamante
+
+Dependencies:
+Python3.
+BeautifulSoup4. Can be downloaded from http://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-beautiful-soup
+SQLite3. Should be included in most systems, but can be downloaded from http://www.sqlite.org/download.html
+
+How to run:
+
+1) Unzip scrapers/scrapers.zip into its current directory.
+	This will create a directory named "onetwosee_season_2014" in the scrapers directory.
+	Ex) /scrapers/onetwosee_season_2014/
+
+2) Run the gen_recap.py file using Python3:
+	Python3 gen_recap.py
+
+3.1) Enter a number, a list of numbers, or "ALL" to generate an article for those games.
+	ex1) Select games between 1 and 1225…: 2
+	ex2) Select games between 1 and 1225…: 4 5 8 10
+	ex3) Select games between 1 and 1225…: ALL
+3.2) Enter "Partial" to generate an article for part of a game.
+	ex1) Enter [quarter minutes seconds]: 3 1 47
+	ex2) Enter [quarter minutes seconds]: 4 0 0
+3.3) Enter "IMPORT" to import scraped data files into the NBA Database.
+	Note: The current build includes a pre-filled database, so this is unnecessary unless you are using different data.
+	Note: "Games" are individual date files per game. "Game Schedules" are data files per day of all the games taking place that day.
+3.4) Enter "SCRAPE" to scrape data files over the Internet onto your local machine.
+	Note: The current build includes all pre-scraped data for the 2014-2015 NBA regular season, so this is unnecessary unless you are using different data.
+	Note: Scraping schedule data downloads all "Game Schedules" for the 2014-2015 regular NBA season. Scraping "Games" downloads all the games found in the schedules table of the local sqlite NBA Database.
+
+4) The resulting articles are output as HTML files in the /web/2014_season directory.
+	Note: The /web/2014_season directory is pre-populated with 1225 generated game recap articles, but these can be safely deleted if you want to run the program yourself. The recap generator will also overwrite an existing article.
+	Note: The images in the /web/img directory belong to their own respective owners and are only being used for educational purposes.
+

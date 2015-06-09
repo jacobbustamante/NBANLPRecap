@@ -1,0 +1,51 @@
+body {
+    font-family: "Helvetica Neue";
+    font-size: 14px;
+    text-align: left;
+
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    margin-left:19%;
+    width:56.35%;
+    max-width:720px
+}
+
+p {
+    color:black;
+    font-size:14px;
+    margin-top: 10px;
+    margin-bottom: 35px;
+    }
+
+h1 {
+    text-align: left;
+    font-size: 24px;
+    margin-bottom:-5px;
+}
+h2 {
+    font-size: 16px;
+    margin-top:-10px;
+}
+h3 {
+    font-size: 16px;
+    margin-top:-10px;
+    margin-bottom:15px;
+    color:grey;
+}
+
+img {
+    margin-left:0px;
+    margin-right:10px;
+    margin-bottom:5px;
+    margin-top:3px;
+
+    border: none;
+    height: 80%;
+    width: 80%;
+}
+
+figure {
+    margin-left:0px;
+    margin-bottom:40px;
+}
