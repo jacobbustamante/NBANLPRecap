@@ -11,7 +11,7 @@ Thumbs.db
 *.swp
 
 # SQLite files
-*.db
+#*.db
 
 # Python files
 *.pyc
